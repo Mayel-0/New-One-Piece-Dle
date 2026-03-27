@@ -133,3 +133,50 @@ code {
 
 .incomplet { background-color: gold;}
 
+.menu {
+  position: fixed;
+  top: 0;
+  right: -100%;
+  width: 250px;
+  height: 100vh; /* Garde toute la hauteur de l'écran */
+  background: #1a1a1a;
+  transition: 0.3s ease;
+  z-index: 10;
+
+  /* ✅ Active le scroll vertical si le contenu dépasse */
+  overflow-y: auto;
+
+  /* ✅ Optionnel : Empêche le scroll horizontal parasite */
+  overflow-x: hidden;
+
+  /* ✅ Pour un look plus propre sur mobile/trackpad */
+  padding-bottom: 50px;
+}
+
+.menu.active {
+  right: 0;
+}
+
+/* 💡 Petit bonus : Personnaliser la barre de scroll pour qu'elle soit plus "Pirate" */
+.menu::-webkit-scrollbar {
+  width: 8px;
+}
+
+.menu::-webkit-scrollbar-track {
+  background: #000;
+}
+
+.menu::-webkit-scrollbar-thumb {
+  background: #00ff88; /* Vert comme tes cases */
+  border-radius: 10px;
+}
+
+.menu p, .menu li {
+  display: flex;
+  align-items: center;
+  padding: 10px 20px;
+  border-bottom: 1px solid #333;
+  margin: 0;
+  color: white;
+  gap: 10px;
+}

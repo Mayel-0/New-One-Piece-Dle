@@ -88,7 +88,7 @@ const CharacterCard = (props) => {
       <p
         className={`Arrows ${resultPrime}`}
         style={{
-          backgroundColor: props.sameArc ? green : red,
+          backgroundColor: props.samePrime ? green : red,
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',

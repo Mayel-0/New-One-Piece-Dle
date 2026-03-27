@@ -1,5 +1,6 @@
 import { cache, useEffect, useState } from 'react'
-import Card from './components/CharacterCard'
+import Header from './components/Header';
+import Card from './components/CharacterCard';
 import confetti from 'canvas-confetti';
 
 const App = () => {
@@ -105,6 +106,7 @@ const App = () => {
 
   return (
     <main>
+      <Header />
       {LoadingListe && LoadingGuessCH && <p>Chargement...</p>}
       {error && <p>Erreur : {error.message}</p>}
       <h1>Guess one piece dle</h1>
