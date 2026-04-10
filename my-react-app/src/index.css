@@ -1,5 +1,5 @@
 :root {
-  --text: #6b6375;
+  --text: #000000;
   --text-h: #08060d;
   --bg: #fff;
   --border: #e5e4e7;
@@ -28,6 +28,10 @@
   @media (max-width: 1024px) {
     font-size: 16px;
   }
+}
+
+p {
+  color: #ffffff;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -91,6 +95,7 @@ h2 {
     font-size: 20px;
   }
 }
+
 p {
   margin: 0;
 }
@@ -179,4 +184,60 @@ code {
   margin: 0;
   color: white;
   gap: 10px;
+}
+
+.chat-box {
+  height: 300px;
+  overflow-y: auto;
+  border: 1px solid #ccc;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  background-color: #f9f9f9;
+  z-index: 10; /* Pour passer devant d'autres éléments si besoin */
+}
+
+/* Aligne les messages à droite pour moi, à gauche pour l'autre */
+.message-wrapper {
+  display: flex;
+  width: 100%;
+  margin: 5px 0;
+}
+
+.message-wrapper.me {
+  justify-content: flex-end;
+}
+
+.message-wrapper.opponent {
+  justify-content: flex-start;
+}
+
+.message-bubble {
+  max-width: 70%;
+  padding: 10px;
+  border-radius: 10px;
+  font-size: 14px;
+}
+
+.me .message-bubble {
+  background-color: #0084ff; /* Bleu */
+  color: white;
+  border-bottom-right-radius: 2px;
+}
+
+.opponent .message-bubble {
+  background-color: #3e3e3e; /* Gris foncé */
+  color: white;
+  border-bottom-left-radius: 2px;
+}
+.Chat-Containeur {
+  position: fixed;
+  bottom: 0;
+  right: -100%;
+  transition: 0.3s ease;
+}
+
+.ChatActive {
+  right: 0;
 }

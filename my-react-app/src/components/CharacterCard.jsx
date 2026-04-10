@@ -51,7 +51,7 @@ const CharacterCard = (props) => {
       }}
     >
       <img
-        src={`http://localhost:3001/images/${props.image}`}
+        src={props.image}
         alt={props.nom}
         style={{ width: '80px', borderRadius: '50%' }}
       />
@@ -67,7 +67,7 @@ const CharacterCard = (props) => {
         {props.affiliation}
       </p>
 
-      <p style={{ background: props.sameFruit ? green : red }}>
+      <p style={{ background: props.sameFruit ? green : red}}>
         {props.fruittype}
       </p>
 

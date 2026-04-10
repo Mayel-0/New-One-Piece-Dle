@@ -6,8 +6,14 @@ const Header = (props) => {
   const [errorArc, setErrorArc] = useState(null);
   const [CharactersByArc, setCharactersByArc] = useState({});
 
+  const [openArcId, setOpenArcId] = useState(null);
+
   const toggleMenu = () => {
     setIsOpen(!isOpen);
+  };
+
+  const toggleArc = (id) => {
+    setOpenArcId(openArcId === id ? null : id);
   };
 
   useEffect(() => {
@@ -50,12 +56,16 @@ const Header = (props) => {
         {Object.keys(CharactersByArc).map((arcId) => {
           const charactersInArc = CharactersByArc[arcId];
           const arcName = charactersInArc.length > 0 ? charactersInArc[0].arc : `Arc ${arcId}`;
+          const isThisArcOpen = openArcId === arcId;
 
           return (
             <div key={arcId}>
-              <h3 style={{ color: 'gold', padding: '10px 20px', margin: 0 }}>
-                {arcName}
-              </h3>
+              <button onClick={() => toggleArc(arcId)} style={{ background: 'none', border: 'none', cursor: 'pointer' }}>
+                <h3 style={{ color: 'gold', padding: '10px 20px', margin: 0 }}>
+                  {arcId} - {arcName}  {isThisArcOpen ? '▼' : '▶'}
+                </h3>
+              </button>
+              {isThisArcOpen && (
               <ul>
                 {charactersInArc.map((character, index) => (
                   <li key={character.id} style={{ listStyle: 'none', paddingLeft: '20px', color: 'white' }}>
@@ -68,6 +78,7 @@ const Header = (props) => {
                   </li>
                 ))}
               </ul>
+              )}
             </div>
           );
         })}
