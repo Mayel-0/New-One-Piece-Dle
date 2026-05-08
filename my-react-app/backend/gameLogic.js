@@ -1,14 +1,20 @@
 const checkGuess = (userGuess, secretCharacter) => {
-  if (userGuess.toLowerCase() === secretCharacter.nom.toLowerCase()) {
+  const normalizedGuess = String(userGuess || "")
+    .trim()
+    .toLowerCase();
+  const normalizedSecret = String(secretCharacter?.nom || "")
+    .trim()
+    .toLowerCase();
+
+  if (!normalizedGuess || !normalizedSecret) {
+    return { status: "WRONG", hints: {} };
+  }
+
+  if (normalizedGuess === normalizedSecret) {
     return { status: "WIN", message: "Trouvé !" };
   }
 
-  const hints = {
-    sameArc: userGuess.arc_id === secretCharacter.arc_id,
-    sameFruit: userGuess.fruit === secretCharacter.fruit,
-  };
-
-  return { status: "WRONG", hints: hints };
+  return { status: "WRONG", hints: {} };
 };
 
 module.exports = { checkGuess };
