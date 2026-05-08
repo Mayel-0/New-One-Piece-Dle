@@ -1,154 +1,61 @@
-import { cache, useEffect, useState } from 'react'
-import Header from '../components/Header';
-import Card from '../components/CharacterCard';
-import confetti from 'canvas-confetti';
+// src/pages/SoloPage.jsx
+import { useGame } from '../hooks/useGame.js'
+import { formatTaille } from '../utils/formatters.js'
+import Header from '../components/Header.jsx'
+import Card from '../components/CharacterCard.jsx'
 
 const SoloPage = () => {
+  const {
+    listeName, characters, inputName, setInputName,
+    guessCharacter, loading, error,
+    submitGuess, resetGame
+  } = useGame()
 
-  const [ListeName, setListeName] = useState([])
-  const [Characters, setCharacters] = useState([])
-  const [InputName, setInputName] = useState("")
-  const [GuessCharacter, setGuessCharacter] = useState(null)
-  const [LoadingListe, setLoadingListe] = useState(true)
-  const [error, setError] = useState(null)
-  const [LoadingGuessCH, setLoadingGuessCH] = useState(true)
-
-  useEffect( () => {
-    fetchListeName()
-    fetchGuessCH()
-  }, [])
-
-  function TradTailleM(ch) {
-    let chM = (ch * 0.01).toFixed(2);
-    return chM.replace('.', 'm');
-  }
-
-  const fetchListeName = async () => {
-    try {
-      setError(null)
-      setLoadingListe(true)
-
-      const response = await fetch("http://localhost:3001/api/characters")
-
-      if (!response.ok) {
-        throw new Error("Erreur api ...")
-      }
-      const data = await response.json()
-      const justName = await data.map((c) => c.nom)
-      setListeName(justName)
-    } catch (err) {
-      setError(err)
-    } finally {
-      setLoadingListe(false)
-    }
-  }
-
-  const fetchGuessCH = async () => {
-    try {
-      setLoadingGuessCH(true)
-      setError(null)
-      setCharacters([])
-
-      const response = await fetch("http://localhost:3001/api/characters/random")
-
-      if (!response.ok) {
-        throw new Error("Erreur api...")
-      }
-
-      const data = await response.json()
-      console.log(data)
-      setGuessCharacter(data)
-    } catch(err) {
-      setError(err)
-    }finally {
-      setLoadingGuessCH(false)
-    }
-  }
-
-  const fetchCharacterByName = async () => {
-    try {
-      setError(null)
-      setLoadingGuessCH(true)
-      const response = await fetch("http://localhost:3001/api/characters?nom="+ InputName)
-
-      if (!response.ok) {
-        throw new Error("Erreur api ...")
-      }
-
-      const data = await response.json()
-      if (data.length > 0) {
-        setCharacters(prev => [data[0], ...prev]);
-      }
-      setInputName("")
-      const character = Array.isArray(data) ? data[0] : data;
-
-      if (character.id === GuessCharacter.id) {
-        confetti({
-          particleCount: 350,
-          spread: 100,
-          origin: { y: 0.6 },
-          colors: ['#ff0000', '#00c8ff', '#1eff00', '#ff00e5', '#fffb00']
-        });
-      }
-    } catch (err) {
-      setError(err)
-    }finally {
-      setLoadingGuessCH(false)
-    }
-  }
-
+  console.log(guessCharacter)
   const handleSubmit = (e) => {
-    e.preventDefault();
-    if (InputName.trim() !== "") {
-      fetchCharacterByName();
-    }
-  };
+    e.preventDefault()
+    submitGuess()
+  }
+
+  if (loading) return <p>Chargement...</p>
+  if (error)   return <p>Erreur : {error.message}</p>
 
   return (
     <main>
       <Header />
-      {LoadingListe && LoadingGuessCH && <p>Chargement...</p>}
-      {error && <p>Erreur : {error.message}</p>}
-      <h1>Guess one piece dle</h1>
+      <h1>Guess One Piece DLE</h1>
+      <button onClick={resetGame}>🎲 Nouveau personnage</button>
 
-      <button onClick={fetchGuessCH}>
-        🎲 Guess Personnage
-      </button>
-
-      <form onSubmit={handleSubmit} style={{ marginTop: '20px' }}>
-        <div>
-          <input
-            list="ListName"
-            value={InputName}
-            placeholder="Tape un nom..."
-            onChange={(e) => setInputName(e.target.value)}
-          />
-          <datalist id="ListName">
-            {ListeName.map((name, index) => (
-              <option key={index} value={name} />
-            ))}
-          </datalist>
-
-          <button type="submit">Valider</button>
-        </div>
+      <form onSubmit={handleSubmit}>
+        <input
+          list="ListName"
+          value={inputName}
+          placeholder="Tape un nom..."
+          onChange={(e) => setInputName(e.target.value)}
+        />
+        <datalist id="ListName">
+          {listeName.map((name, i) => <option key={i} value={name} />)}
+        </datalist>
+        <button type="submit">Valider</button>
       </form>
+
       <div>
-        {Characters.map((Characters) => {
+        {characters.map((Characters) => {
 
-          const sameName  = GuessCharacter && Characters.nom   === GuessCharacter.nom;
-          const sameGenre = GuessCharacter && Characters.genre === GuessCharacter.genre;
-          const sameFruit = GuessCharacter && Characters.fruit === GuessCharacter.fruit;
-          const sameArc   = GuessCharacter && Characters.arc   === GuessCharacter.arc;
-          const samePrime = GuessCharacter && Characters.prime === GuessCharacter.prime;
-          const sameCrew =  GuessCharacter && Characters.affiliation === GuessCharacter.affiliation;
-          const sameOrigine = GuessCharacter && Characters.origine === GuessCharacter.origine
-          const sameTaille = GuessCharacter && Characters.taille === GuessCharacter.taille
-          const sameHaki = GuessCharacter && Characters.haki === GuessCharacter.haki
+          const sameName  = guessCharacter && Characters.nom   === guessCharacter.nom;
+          const sameGenre = guessCharacter && Characters.genre === guessCharacter.genre;
+          const sameFruit = guessCharacter && Characters.fruit === guessCharacter.fruit;
+          const sameArc   = guessCharacter && Characters.arc   === guessCharacter.arc;
+          const samePrime = guessCharacter && Characters.prime === guessCharacter.prime;
+          const sameCrew =  guessCharacter && Characters.affiliation === guessCharacter.affiliation;
+          const sameOrigine = guessCharacter && Characters.origine === guessCharacter.origine
+          const sameTaille = guessCharacter && Characters.taille === guessCharacter.taille
+          const sameHaki = guessCharacter && Characters.haki === guessCharacter.haki
 
-          const guessedArcId = Number(GuessCharacter?.arc_id);
+          const guessedArcId = Number(guessCharacter?.arc_id);
           const currentArcId = Number(Characters.arc_id);
 
-          const guessedHakiId = Number(GuessCharacter?.haki_id);
+          const guessedHakiId = Number(guessCharacter?.haki_id);
           const currentHakiId = Number(Characters.haki_id);
 
           let arcCompare = 0;
@@ -165,15 +72,15 @@ const SoloPage = () => {
           }
 
           let primeCompare = 0;
-          if (!Number.isNaN(GuessCharacter?.prime) && !Number.isNaN(Characters.prime)) {
-            if (Characters.prime < GuessCharacter.prime) primeCompare = 1;
-            else if (Characters.prime > GuessCharacter.prime) primeCompare = -1;
+          if (!Number.isNaN(guessCharacter?.prime) && !Number.isNaN(Characters.prime)) {
+            if (Characters.prime < guessCharacter.prime) primeCompare = 1;
+            else if (Characters.prime > guessCharacter.prime) primeCompare = -1;
           }
 
           let taillecompare = 0;
-          if (!Number.isNaN(GuessCharacter?.taille) && !Number.isNaN(Characters.taille)) {
-            if (Characters.taille < GuessCharacter.taille) taillecompare = 1;
-            else if (Characters.taille > GuessCharacter.taille) taillecompare = -1;
+          if (!Number.isNaN(guessCharacter?.taille) && !Number.isNaN(Characters.taille)) {
+            if (Characters.taille < guessCharacter.taille) taillecompare = 1;
+            else if (Characters.taille > guessCharacter.taille) taillecompare = -1;
           }
 
           return (
@@ -185,7 +92,7 @@ const SoloPage = () => {
             fruittype={Characters.fruit}
             haki={Characters.haki}
             prime={Characters.prime + ' ฿'}
-            taille={TradTailleM(Characters.taille)}
+            taille={formatTaille(Characters.taille)}
             origine={Characters.origine}
             arc={Characters.arc}
 
@@ -211,9 +118,6 @@ const SoloPage = () => {
       </div>
     </main>
   )
-
 }
 
 export default SoloPage
-
-

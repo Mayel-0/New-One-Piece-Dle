@@ -1,0 +1,41 @@
+:root {
+  --gold: #D4A017;
+  --gold-light: #F5C842;
+  --gold-dark: #9A6F00;
+  --cream: #F5EDD8;
+  --parchment: #E8D5A3;
+  --parchment-dark: #C9B57A;
+  --red: #C0392B;
+  --red-vivid: #E74C3C;
+  --green: #27AE60;
+  --green-vivid: #2ECC71;
+  --navy: #0D1B2A;
+  --navy-mid: #1A2E45;
+  --navy-light: #243B55;
+  --wood: #5C3317;
+  --wood-light: #7B4A22;
+  --rope: #8B6914;
+  --white: #FFF8F0;
+  --shadow: rgba(0,0,0,0.6);
+  --font-script: 'One Piece', cursive;
+}
+
+@font-face {
+  font-family: "One Piece";
+  src: url('../assets/fonts/onepiece.ttf') format('truetype');
+  font-weight: 400;
+	font-style: normal;
+	font-display: swap;
+}
+
+body {
+  font-family: var(--font-script);
+  background: var(--navy);
+  color: var(--cream);
+  min-height: 100vh;
+  overflow-x: hidden;
+  position: relative;
+}
+
+/* Global Styles */
+

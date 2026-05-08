@@ -33,10 +33,7 @@ const Header = (props) => {
         }
 
         const data = await response.json()
-        setCharactersByArc(prev => ({
-          ...prev,
-          [arcId]: data
-        }));
+
       }
 
     } catch (err) {
